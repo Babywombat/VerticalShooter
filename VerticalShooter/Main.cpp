@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include "Graphics.h"
 
+graphics* g_graphics;
+
 /// <summary>
 /// Window callback function. Processes messages sent to a window.
 /// </summary>
@@ -15,6 +17,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			//Destroy the window
 			PostQuitMessage(0);
 			return 0;
+		}
+		case WM_PAINT: {
+			//Paint event
+			g_graphics->begin_draw();
+			//Clear to dark blue
+			g_graphics->clear_screen(0.0f, 0.0f, 0.0f);
+			
+			//Draw random circles
+			for (size_t i = 0; i < 100; i++) {
+				g_graphics->draw_circle(rand() % 1024, rand() % 768, rand() % 100, 1.0f, 0.0f, 0.0f, 1.0f);
+			}
+			g_graphics->end_draw();
 		}
 		default: {
 			//Default processing of the message
@@ -56,22 +70,32 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Create the window and get the handle
 	HWND hwnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, "MainWindow", "Vertical Shooter",
-		WS_OVERLAPPEDWINDOW, 200, 200, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, hInstance, 0);
+		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, hInstance, 0);
 
 	if (!hwnd) {
 		//No window was created
 		return -1;
 	}
 
+	//Create the graphics
+	g_graphics = new graphics();
+	if(!g_graphics->init(hwnd)) {
+		delete g_graphics;
+		return -1;
+	}
+
 	//Show the window
 	ShowWindow(hwnd, nCmdShow);
+	UpdateWindow(hwnd);
 
 	MSG message;
 	//Get all the messages from this thread's windows
 	while (GetMessage(&message, NULL, 0, 0)) {
 		//Dispatch the message to the callback
+		TranslateMessage(&message);
 		DispatchMessage(&message);
 	}
 
+	delete g_graphics;
 	return 0;
 }
