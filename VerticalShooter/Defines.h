@@ -1,0 +1,7 @@
+#ifndef VS_DEFINES_HPP
+#define VS_DEFINES_HPP
+
+#define RESOLUTION_X 1024
+#define RESOLUTION_Y 768
+
+#endif VS_DEFINES_HPP

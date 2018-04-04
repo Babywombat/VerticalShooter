@@ -1,5 +1,7 @@
 #include "Input.h"
 
+using namespace vs;
+
 /// <summary>
 /// Constructor
 /// </summary>

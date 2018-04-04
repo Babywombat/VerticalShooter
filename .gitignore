@@ -30,4 +30,5 @@
 *.exe
 *.out
 *.app
-VerticalShooter/.vs/VerticalShooter/v15/Browse.VC.opendb
+VerticalShooter/.vs/
+VerticalShooter/x64/

@@ -23,7 +23,7 @@ int WINAPI WinMain(
 
 	if (SUCCEEDED(CoInitialize(NULL))) {
 		{
-			game game;
+			vs::game game;
 
 			if (SUCCEEDED(game.initialize())) {
 				game.run_game_loop();

@@ -2,16 +2,18 @@
 
 #include "Game.h"
 #include "Input.h"
+#include "Defines.h"
 
 using namespace D2D1;
+using namespace vs;
 
 /// <summary>
 /// Constructor
 /// </summary>
 game::game() :
-	_hwnd(nullptr),
-	_direct2d_factory(nullptr),
-	_render_target(nullptr) {
+	_hwnd					(nullptr),
+	_direct2d_factory		(nullptr),
+	_render_target			(nullptr) {
 }
 
 /// <summary>
@@ -49,15 +51,16 @@ HRESULT game::initialize() {
 		RegisterClassEx(&wcex);
 
 		//Calculate the real size of the window for the overlapped style
-		RECT rect = { 0, 0, _window_width, _window_height };
+		RECT rect = { 0, 0, RESOLUTION_X, RESOLUTION_Y };
 		AdjustWindowRectEx(&rect, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
 
+		auto dwStyle = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU);
+
 		// Create the window.
-		_hwnd = CreateWindowEx(
-			WS_EX_OVERLAPPEDWINDOW,
+		_hwnd = CreateWindow(
 			"VSApp",
 			"Vertical Shooter",
-			WS_OVERLAPPEDWINDOW,
+			dwStyle,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
 			rect.right - rect.left,
@@ -86,7 +89,7 @@ void game::run_game_loop() {
 	MSG msg;
 	msg.message = WM_NULL;
 
-	_player.initialize(100, 100);
+	_logic.initialize();
 	//Get all the messages from this thread's windows
 	while(msg.message != WM_QUIT) {
 		//Check for message
@@ -178,10 +181,11 @@ HRESULT game::on_render() {
 
 		_render_target->SetTransform(Matrix3x2F::Identity());
 
-		//Clear the window to white
+		//clear the window to white
 		_render_target->Clear(ColorF(ColorF::Black));
 
-		_player.on_render(_render_target);
+		//Render the game
+		_logic.on_render(_render_target);
 
 		//End drawing
 		hr = _render_target->EndDraw();
@@ -200,7 +204,10 @@ HRESULT game::on_render() {
 /// <param name="timer">Timer to get delta time</param>
 void game::on_update(const DX::StepTimer& timer) {
 	auto delta = timer.GetElapsedSeconds();
-	_player.on_update(delta);
+	if(_logic.on_update(delta)) {
+		//Game ended
+		PostQuitMessage(0);
+	}
 }
 
 /// <summary>
