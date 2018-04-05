@@ -22,7 +22,7 @@ input::~input() {
 /// </summary>
 /// <param name="key">Key to check</param>
 /// <returns></returns>
-bool input::is_key_down(keys key) {
+bool input::is_key_down(E_KEYS key) {
 	const auto state = _ascii_keys[static_cast<int>(key)];
 	return state >= pressed;
 }
@@ -32,7 +32,7 @@ bool input::is_key_down(keys key) {
 /// </summary>
 /// <param name="key">Key to check</param>
 /// <returns></returns>
-bool input::is_key_held(keys key) {
+bool input::is_key_held(E_KEYS key) {
 	const auto state = _ascii_keys[static_cast<int>(key)];
 	return state == held;
 }
@@ -60,7 +60,7 @@ bool input::try_handle_keyboard_message(const MSG& keyboard_message) {
 			const auto current_state = static_cast<int>(_ascii_keys[code]);
 
 			_ascii_keys[code] = current_state + 1 > static_cast<int>(held) ?
-				held : static_cast<key_state>(current_state + 1);
+				held : static_cast<E_KEY_STATE>(current_state + 1);
 			was_handled = true;
 			break;
 		}

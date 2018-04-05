@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include "Player.h"
-#include <cmath>
+#include "Defines.h"
 
 using namespace vs;
 
@@ -8,7 +8,7 @@ using namespace vs;
 /// Constructor
 /// </summary>
 enemy::enemy(): 
-	actor	(0, 0, 25, 25) {
+	game_object	(0, 0, 25, 25) {
 	
 }
 
@@ -22,16 +22,12 @@ enemy::~enemy() = default;
 /// </summary>
 /// <param name="delta_time">Time since last frame</param>
 void enemy::on_update(double delta_time) {
+	if (is_dead()) return;
 	const auto current_change = _speed * static_cast<float>(delta_time);
 
-	if(_player != nullptr) {
-		const auto diff_x = static_cast<int>(_player->get_x()) - static_cast<int>(_x);
-		const auto diff_y = static_cast<int>(_player->get_y()) - static_cast<int>(_y);
+	_y += current_change;
 
-		const auto length = sqrt(diff_x * diff_x + diff_y * diff_y);
-		_x += current_change * static_cast<float>(diff_x) / length;
-		_y += current_change * static_cast<float>(diff_y) / length;
-	}
+	if (_y - _height >= RESOLUTION_Y) inflict_damage(1);
 }
 
 /// <summary>
@@ -50,7 +46,7 @@ void enemy::on_render(ID2D1HwndRenderTarget* render_target) {
 
 	//Draw the lines
 	render_target->FillEllipse(D2D1::Ellipse(center, _width / 2, _height / 2), brush);
-	render_target->DrawRectangle(get_aabb(), brush);
+	//render_target->DrawRectangle(get_aabb(), brush);
 
 	brush->Release();
 }
@@ -62,12 +58,13 @@ void enemy::initialize() {
 	_color = D2D1::ColorF(D2D1::ColorF::Red, 1.0f);
 	_speed = 20.0f;
 	_health = 1;
+	set_layer(E_LAYER::enemy);
 }
 
 /// <summary>
-/// Sets the player of this enemy
+/// Handles the collisions with other objects
 /// </summary>
-/// <param name="player">Player to set</param>
-void enemy::set_player(player* player) {
-	_player = player;
+/// <param name="collided_object">Object that this object collided with</param>
+void enemy::handle_collision(transform_2d* collided_object) {
+	inflict_damage(1);
 }

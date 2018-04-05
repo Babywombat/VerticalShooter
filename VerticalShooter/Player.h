@@ -1,17 +1,24 @@
 #ifndef VS_PLAYER_HPP
 #define VS_PLAYER_HPP
 
-#include "Actor.h"
+#include "GameObject.h"
 
 namespace vs {
-	class player : public actor {
+	class game_logic;
+
+	class player : public game_object {
+	private:
+		game_logic*		_logic;
+		float			_time_since_bullet;
+		float			_shooting_speed;
 	public:
-		explicit player();
+		explicit player(game_logic* logic);
 		~player();
 
 		void			on_update		(double delta_time) override;
 		void			on_render		(ID2D1HwndRenderTarget* render_target) override;
 		void			initialize		() override;
+		void			handle_collision(transform_2d* collided_object) override;
 	};
 }
 

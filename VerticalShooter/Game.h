@@ -3,6 +3,8 @@
 
 #include <windows.h>
 #include <d2d1.h>
+#include <Dwrite.h>
+
 #include "StepTimer.h"
 #include "Player.h"
 #include "GameLogic.h"
@@ -27,6 +29,8 @@ namespace vs {
 		HWND								_hwnd;
 		ID2D1Factory*						_direct2d_factory;
 		ID2D1HwndRenderTarget*				_render_target;
+		IDWriteFactory*						_write_factory;
+		IDWriteTextFormat*					_text_format;
 		DX::StepTimer						_timer;
 		game_logic							_logic;
 

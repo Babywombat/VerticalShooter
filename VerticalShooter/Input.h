@@ -6,7 +6,7 @@
 namespace vs {
 	class input {
 	private:
-		enum key_state {
+		enum E_KEY_STATE {
 			none = 0,
 			pressed = 1,
 			held = 2
@@ -14,9 +14,9 @@ namespace vs {
 
 		input();
 
-		key_state _ascii_keys[255]{};
+		E_KEY_STATE _ascii_keys[255]{};
 	public:
-		enum keys {
+		enum E_KEYS {
 			Backspace = 0x08,
 			Tab = 0x09,
 			Clear = 0x0C,
@@ -181,8 +181,8 @@ namespace vs {
 
 		~input();
 
-		bool is_key_down(keys key);
-		bool is_key_held(keys key);
+		bool is_key_down(E_KEYS key);
+		bool is_key_held(E_KEYS key);
 
 		input(const input&) = delete;
 		void operator=(const input&) = delete;

@@ -1,15 +1,15 @@
-#ifndef VS_ENEMY_HPP
-#define VS_ENEMY_HPP
+#ifndef VS_BULLET_HPP
+#define VS_BULLET_HPP
 
 #include "GameObject.h"
 
 namespace vs {
-	class player;
+	class bullet : public game_object {
+	private:
 
-	class enemy : public game_object {
 	public:
-		enemy();
-		~enemy();
+		bullet();
+		~bullet();
 
 		void			on_update(double delta_time) override;
 		void			on_render(ID2D1HwndRenderTarget* render_target) override;
@@ -18,4 +18,4 @@ namespace vs {
 	};
 }
 
-#endif //VS_ENEMY_HPP
+#endif //VS_BULLET_HPP

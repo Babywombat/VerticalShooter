@@ -1,16 +1,18 @@
 #include "Player.h"
 #include "Input.h"
 #include "Defines.h"
+#include "GameLogic.h"
 
 using namespace vs;
 
 /// <summary>
 /// Constructor
 /// </summary>
-/// <param name="x"></param>
-/// <param name="y"></param>
-player::player() : 
-	actor	(0, 0, 50.0f, 25.0f) {}
+player::player(game_logic* logic) : 
+	game_object			(0, 0, 50.0f, 25.0f),
+	_logic				(logic),
+	_time_since_bullet	(0.0f),
+	_shooting_speed		(0.5f){}
 
 /// <summary>
 /// Destructor
@@ -22,19 +24,26 @@ player::~player() = default;
 /// </summary>
 /// <param name="delta_time">Time since last update</param>
 void player::on_update(double delta_time) {
+	if (is_dead()) return;
+
+	//Decrease bullet cooldown
+	if(_time_since_bullet > 0.0f) {
+		_time_since_bullet -= delta_time;
+	}
+
 	const auto current_change = _speed * static_cast<float>(delta_time);
 
 	//Left/Right
-	if(input::get_instance().is_key_down(input::keys::A)) {
+	if(input::get_instance().is_key_down(input::E_KEYS::A)) {
 		_x -= current_change;
-	} else if(input::get_instance().is_key_down(input::keys::D)) {
+	} else if(input::get_instance().is_key_down(input::E_KEYS::D)) {
 		_x += current_change;
 	}
 
 	//Up/Down
-	if (input::get_instance().is_key_down(input::keys::W)) {
+	if (input::get_instance().is_key_down(input::E_KEYS::W)) {
 		_y -= current_change;
-	} else if (input::get_instance().is_key_down(input::keys::S)) {
+	} else if (input::get_instance().is_key_down(input::E_KEYS::S)) {
 		_y += current_change;
 	}
 
@@ -42,6 +51,14 @@ void player::on_update(double delta_time) {
 	if (_y < _height) _y = _height;
 	if (_x > RESOLUTION_X - _width) _x = RESOLUTION_X - _width;
 	if (_y > RESOLUTION_Y) _y = RESOLUTION_Y;
+
+	if(input::get_instance().is_key_down(input::Space)) {
+		//Create a bullet
+		if(_time_since_bullet <= 0.0f) {
+			_time_since_bullet = _shooting_speed;
+			_logic->create_bullet(bullet_factory::normal, _x + _width / 2, _y - _height);
+		}
+	}
 }
 
 /// <summary>
@@ -67,7 +84,7 @@ void player::on_render(ID2D1HwndRenderTarget* render_target) {
 	//Draw the lines
 	render_target->DrawLine(point1, point2, brush, line_width);
 	render_target->DrawLine(point2, point3, brush, line_width);
-	render_target->DrawRectangle(get_aabb(), brush);
+	//render_target->DrawRectangle(get_aabb(), brush);
 
 	brush->Release();
 }
@@ -79,4 +96,14 @@ void player::initialize() {
 	_color = D2D1::ColorF(D2D1::ColorF::Green, 1.0f);
 	_speed = 200.0f;
 	_health = 5;
+	_shooting_speed = 0.2f;
+	set_layer(E_LAYER::player);
+}
+
+/// <summary>
+/// Handles the collisions with other objects
+/// </summary>
+/// <param name="collided_object">Object that this object collided with</param>
+void player::handle_collision(transform_2d* collided_object) {
+	inflict_damage(1);
 }

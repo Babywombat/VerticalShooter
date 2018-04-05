@@ -1,6 +1,7 @@
-#include "Quadtree.h"
 #include <iostream>
 #include <sstream>
+
+#include "Quadtree.h"
 
 using namespace std;
 using namespace vs;
@@ -50,7 +51,7 @@ quadtree::~quadtree() {
 /// Adds a new object to the tree
 /// </summary>
 /// <param name="object">Object to add</param>
-void quadtree::add_object(transform_2d* object) {
+void quadtree::add_object(game_object* object) {
 	if (_level == _max_level) {
 		_objects.push_back(object);
 		return;
@@ -74,37 +75,45 @@ void quadtree::add_object(transform_2d* object) {
 /// </summary>
 /// <param name="x">Position on the x axis</param>
 /// <param name="y">Position on the y axis</param>
+/// <param name="layer">Accepted layers of the object</param>
 /// <returns>List of collision objects</returns>
-vector<transform_2d*> quadtree::get_objects_at(float x, float y) const {
+vector<game_object*> quadtree::get_objects_at(float x, float y, int layer) const {
 	if (_level == _max_level) {
-		return _objects;
+		if(layer == 0) {
+			return _objects;
+		}
+		return get_objects_at_layer(layer);
 	}
-	
-	vector<transform_2d*> return_objects, child_return_objects;
+
+	vector<game_object*> return_objects, child_return_objects;
 	if (!_objects.empty()) {
-		return_objects = _objects;
+		if(layer == 0) {
+			return_objects = _objects;
+		} else {
+			return_objects = get_objects_at_layer(layer);
+		}
 	}
 
 	//Check each subtree and add results
-	if (_x > x + _width / 2.0f && _x < x + _width) {
-		if (_y > y + _height / 2.0f && _y < y + _height) {
-			child_return_objects = _se->get_objects_at(_x, _y);
+	if (x > _x + _width / 2.0f && x < _x + _width) {
+		if (y > _y + _height / 2.0f && y < _y + _height) {
+			child_return_objects = _se->get_objects_at(x, y);
 			return_objects.insert(return_objects.end(), child_return_objects.begin(), child_return_objects.end());
 			return return_objects;
 		}
-		if (_y > y && _y <= y + _height / 2.0f) {
-			child_return_objects = _ne->get_objects_at(_x, _y);
+		if (y > _y && y <= _y + _height / 2.0f) {
+			child_return_objects = _ne->get_objects_at(x, y);
 			return_objects.insert(return_objects.end(), child_return_objects.begin(), child_return_objects.end());
 			return return_objects;
 		}
-	} else if (_x > x && _x <= x + _width / 2.0f) {
-		if (_y > y + _height / 2.0f && _y < y + _height) {
-			child_return_objects = _sw->get_objects_at(_x, _y);
+	} else if (x > _x && x <= _x + _width / 2.0f) {
+		if (y > _y + _height / 2.0f && y < _y + _height) {
+			child_return_objects = _sw->get_objects_at(x, y);
 			return_objects.insert(return_objects.end(), child_return_objects.begin(), child_return_objects.end());
 			return return_objects;
 		}
-		if (_y > y && _y <= y + _height / 2.0f) {
-			child_return_objects = _nw->get_objects_at(_x, _y);
+		if (y > _y && y <= _y + _height / 2.0f) {
+			child_return_objects = _nw->get_objects_at(x, y);
 			return_objects.insert(return_objects.end(), child_return_objects.begin(), child_return_objects.end());
 			return return_objects;
 		}
@@ -116,12 +125,12 @@ vector<transform_2d*> quadtree::get_objects_at(float x, float y) const {
 /// Returns all the objects in the tree
 /// </summary>
 /// <returns></returns>
-vector<transform_2d*> quadtree::get_all_objects() const {
+vector<game_object*> quadtree::get_all_objects() const {
 	if (_level == _max_level) {
 		return _objects;
 	}
 
-	vector<transform_2d*> return_objects;
+	vector<game_object*> return_objects;
 	if (!_objects.empty()) {
 		return_objects = _objects;
 	}
@@ -162,10 +171,9 @@ void quadtree::clear() {
 /// <summary>
 /// Updates the quadtree, so that moved objects are sorted correctly
 /// </summary>
-void quadtree::update() {
+void quadtree::update(const std::vector<game_object*>& objects) {
 	//Only allow calling on the root
 	if (_parent != nullptr) return;
-	auto objects = get_all_objects();
 	
 	//Rebuild the tree
 	clear();
@@ -179,6 +187,7 @@ void quadtree::update() {
 /// </summary>
 /// <param name="render_target">Target to render to</param>
 void quadtree::render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrush* brush) {
+	if (render_target == nullptr) return;
 	if(brush == nullptr) {
 		render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AntiqueWhite), &brush);
 	}
@@ -202,7 +211,8 @@ void quadtree::render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrush
 /// <param name="child">Tree to check</param>
 /// <param name="object">Object to check</param>
 /// <returns></returns>
-bool quadtree::contains(quadtree *child, transform_2d *object) {
+bool quadtree::contains(quadtree *child, game_object *object) {
+	if (child == nullptr || object == nullptr) return false;
 	//Classic aabb collision check
 	return	 !(object->get_x() < child->_x ||
 				object->get_y() < child->_y ||
@@ -212,4 +222,33 @@ bool quadtree::contains(quadtree *child, transform_2d *object) {
 				object->get_y() + object->get_height() < child->_y ||
 				object->get_x() + object->get_width() > child->_x + child->_width ||
 				object->get_y() + object->get_height() > child->_y + child->_height);
+}
+
+/// <summary>
+/// Returns true if the object has a layer contained in the given layer
+/// </summary>
+/// <param name="object">Object to test layer of</param>
+/// <param name="layer">Layers to check</param>
+/// <returns></returns>
+bool quadtree::has_any_layer(game_object* object, int layer) const {
+	if (object == nullptr) return false;
+	const auto obj_layer = object->get_layer();
+
+	//Test if bit is set
+	return ((obj_layer & layer) == obj_layer);
+}
+
+/// <summary>
+/// Returns a vector of all the objects that match the given layers
+/// </summary>
+/// <param name="layer">Layers to check for</param>
+/// <returns></returns>
+std::vector<game_object*> quadtree::get_objects_at_layer(int layer) const {
+	vector<game_object*> return_objects;
+	for (auto object : _objects) {
+		if (has_any_layer(object, layer)) {
+			return_objects.push_back(object);
+		}
+	}
+	return return_objects;
 }

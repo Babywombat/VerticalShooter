@@ -9,7 +9,20 @@ namespace vs {
 		float			_y;
 		float			_width;
 		float			_height;
+
 	public:
+		/// <summary>
+		/// Collision matrix to determine which layers should collide
+		/// </summary>
+		static bool collision_matrix[4][4];
+
+		enum E_LAYER {
+			no_collisions = 0,
+			bullet = 1,
+			enemy = 2,
+			player = 3
+		};
+
 		transform_2d(float x, float y, float width, float height);
 		virtual ~transform_2d();
 
@@ -21,6 +34,11 @@ namespace vs {
 
 		void			set_position(float x, float y);
 		bool			is_colliding(transform_2d* other) const;
+
+		void			set_layer(E_LAYER layer);
+		E_LAYER			get_layer() const;
+	private:
+		E_LAYER			_layer;
 	};
 }
 

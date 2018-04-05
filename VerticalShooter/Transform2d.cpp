@@ -1,5 +1,12 @@
 #include "Transform2d.h"
 
+bool vs::transform_2d::collision_matrix[4][4] = {
+	false,	false,	false,	false,
+	false,	false,	true,	false,
+	false,	true,	false,	true,
+	false,	false,	true,	false,
+};
+
 /// <summary>
 /// Constructor
 /// </summary>
@@ -78,4 +85,20 @@ bool vs::transform_2d::is_colliding(transform_2d* other) const {
 	if (my_aabb.top > other_aabb.bottom || my_aabb.bottom < other_aabb.top) return false;
 
 	return true;
+}
+
+/// <summary>
+/// Sets this object's layer
+/// </summary>
+/// <param name="layer">Layer to set</param>
+void vs::transform_2d::set_layer(const E_LAYER layer) {
+	_layer = layer;
+}
+
+/// <summary>
+/// Returns this object's layer
+/// </summary>
+/// <returns>Layer of the object</returns>
+vs::transform_2d::E_LAYER vs::transform_2d::get_layer() const {
+	return _layer;
 }

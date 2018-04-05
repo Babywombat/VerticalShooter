@@ -1,5 +1,6 @@
 #include <iostream>
 
+
 #include "Game.h"
 #include "Input.h"
 #include "Defines.h"
@@ -128,6 +129,40 @@ HRESULT game::create_device_independant_resources() {
 	// Create a Direct2D factory.
 	hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_direct2d_factory);
 
+	static const WCHAR msc_fontName[] = L"Verdana";
+	static const FLOAT msc_fontSize = 20;
+
+	if (SUCCEEDED(hr)) {
+
+		// Create a DirectWrite factory.
+		hr = DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(_write_factory),
+			reinterpret_cast<IUnknown **>(&_write_factory)
+		);
+	}
+	if (SUCCEEDED(hr)) {
+		// Create a DirectWrite text format object.
+		hr = _write_factory->CreateTextFormat(
+			msc_fontName,
+			nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			msc_fontSize,
+			L"", //locale
+			&_text_format
+		);
+	}
+	if (SUCCEEDED(hr)) {
+		// Center the text horizontally and vertically.
+		_text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+
+		_text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+
+	}
+
 	return hr;
 }
 
@@ -185,7 +220,7 @@ HRESULT game::on_render() {
 		_render_target->Clear(ColorF(ColorF::Black));
 
 		//Render the game
-		_logic.on_render(_render_target);
+		_logic.on_render(_render_target, _text_format);
 
 		//End drawing
 		hr = _render_target->EndDraw();
