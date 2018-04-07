@@ -13,15 +13,15 @@ namespace vs {
 			multi = 1
 		};
 
-		bullet();
-		~bullet();
+		bullet								();
+		~bullet								();
 
-		void			on_update(double delta_time) override;
-		void			on_render(ID2D1HwndRenderTarget* render_target) override;
-		void			initialize() override;
-		void			handle_collision(transform_2d* collided_object) override;
+		void			on_update			(double delta_time) override;
+		void			on_render			(ID2D1HwndRenderTarget* render_target) override;
+		void			initialize			() override;
+		void			handle_collision	(transform_2d* collided_object) override;
 
-		void			set_direction(const int direction);
+		void			set_direction		(int direction);
 	};
 }
 

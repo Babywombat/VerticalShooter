@@ -2,7 +2,6 @@
 #define VS_QUADTREE_HPP
 
 #include <vector>
-#include "Transform2d.h"
 #include "GameObject.h"
 
 using namespace std;

@@ -27,21 +27,25 @@ namespace vs {
 		int							_points;
 		int							_killed_enemies;
 
-		void						check_collisions();
-		void						cleanup(bool end = false);
-		void						create_enemy(enemy::E_ENEMY_TYPE type, float x, float y);
-		void						on_update_spawn(const float delta);
+		void						check_collisions				();
+		void						cleanup							(bool end = false);
+		void						create_enemy					(enemy::E_ENEMY_TYPE type, float x, float y);
+		void						on_update_spawn					(const float delta);
 	public:
-		game_logic(game* game);
-		~game_logic();
+		game_logic													(game* game);
+		~game_logic													();
 
-		void						initialize();
+		void						initialize						();
 
-		void						on_render(ID2D1HwndRenderTarget* render_target, IDWriteTextFormat* text_format);
-		bool						on_update(double delta);
+		void						on_render						(ID2D1HwndRenderTarget* render_target,
+																	IDWriteTextFormat* text_format);
+		bool						on_update						(double delta);
 
-		void						create_bullets(bullet::E_BULLET_TYPE type, float x, float y, transform_2d::E_LAYER layer = transform_2d::E_LAYER::player_bullet);
-		game*						get_game() const;
+		void						create_bullets					(bullet::E_BULLET_TYPE type,
+																	float x, 
+																	float y,
+																	transform_2d::E_LAYER layer = transform_2d::E_LAYER::player_bullet);
+		game*						get_game						() const;
 
 	};
 }

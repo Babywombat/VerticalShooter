@@ -12,13 +12,13 @@ namespace vs {
 		float			_time_since_bullet;
 		float			_shooting_speed;
 	public:
-		explicit player(game_logic* logic);
-		~player();
+		explicit player						(game_logic* logic);
+		~player								();
 
-		void			on_update		(double delta_time) override;
-		void			on_render		(ID2D1HwndRenderTarget* render_target) override;
-		void			initialize		() override;
-		void			handle_collision(transform_2d* collided_object) override;
+		void			on_update			(double delta_time) override;
+		void			on_render			(ID2D1HwndRenderTarget* render_target) override;
+		void			initialize			() override;
+		void			handle_collision	(transform_2d* collided_object) override;
 	};
 }
 

@@ -69,9 +69,9 @@ void game_logic::on_render(ID2D1HwndRenderTarget* render_target, IDWriteTextForm
 	for (size_t i = 0; static_cast<int>(i) < _player.get_health(); i++) {
 		render_target->FillRoundedRectangle(D2D1::RoundedRect(
 			D2D1::RectF(
-				RESOLUTION_X - (i + 1) * 30,
+				RESOLUTION_X - (static_cast<int>(i) + 1) * 30,
 				RESOLUTION_Y - 30,
-				RESOLUTION_X - ((i + 1) * 30) + 25,
+				RESOLUTION_X - ((static_cast<int>(i) + 1) * 30) + 25,
 				RESOLUTION_Y - 5), 5, 5), brush);
 	}
 

@@ -23,22 +23,22 @@ namespace vs {
 			player = 3
 		};
 
-		transform_2d(float x, float y, float width, float height);
+		transform_2d							(float x, float y, float width, float height);
 		virtual ~transform_2d();
 
-		float			get_x()				const;
-		float			get_y()				const;
-		float			get_width()			const;
-		float			get_height()		const;
-		D2D1_RECT_F		get_aabb()			const;
+		float			get_x					() const;
+		float			get_y					() const;
+		float			get_width				() const;
+		float			get_height				() const;
+		D2D1_RECT_F		get_aabb				() const;
 
-		void			set_size(float width, float height);
+		void			set_size				(float width, float height);
 
-		void			set_position(float x, float y);
-		bool			is_colliding(transform_2d* other) const;
+		void			set_position			(float x, float y);
+		bool			is_colliding			(transform_2d* other) const;
 
-		void			set_layer(E_LAYER layer);
-		E_LAYER			get_layer() const;
+		void			set_layer				(E_LAYER layer);
+		E_LAYER			get_layer				() const;
 	private:
 		E_LAYER			_layer;
 	};

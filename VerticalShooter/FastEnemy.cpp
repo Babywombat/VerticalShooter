@@ -1,5 +1,4 @@
 #include "FastEnemy.h"
-#include "Defines.h"
 #include "Utils.h"
 
 using namespace vs;

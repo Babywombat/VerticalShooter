@@ -6,9 +6,10 @@
 #include <Dwrite.h>
 
 #include "StepTimer.h"
-#include "Player.h"
 #include "GameLogic.h"
 
+
+//Base address of dos module, same as the address of the current instance
 #ifndef HINST_THISCOMPONENT
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
@@ -25,27 +26,30 @@ namespace vs {
 		IDWriteTextFormat*					_text_format;
 		DX::StepTimer						_timer;
 		game_logic							_logic;
-	private:
+
 		//Functions
-		HRESULT								create_device_independant_resources();
-		HRESULT								create_device_resources();
-		void								discard_device_resources();
+		HRESULT								create_device_independant_resources		();
+		HRESULT								create_device_resources					();
+		void								discard_device_resources				();
 
-		HRESULT								on_render();
-		void								on_update(const DX::StepTimer& timer);
+		HRESULT								on_render								();
+		void								on_update								(const DX::StepTimer& timer);
 
-		void								on_resize(UINT width, UINT height);
+		void								on_resize								(UINT width, UINT height);
 
-		static LRESULT CALLBACK				wnd_proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		static LRESULT CALLBACK				wnd_proc								(HWND hWnd,
+																					UINT message,
+																					WPARAM wParam,
+																					LPARAM lParam);
 
 	public:
-		game();
-		~game();
+		game																		();
+		~game																		();
 
-		HRESULT								initialize();
+		HRESULT								initialize								();
 
-		void								run_game_loop();
-		ID2D1Factory* get_direct2d_factory() const;
+		void								run_game_loop							();
+		ID2D1Factory*						get_direct2d_factory					() const;
 	};
 }
 

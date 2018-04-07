@@ -1,5 +1,6 @@
-#ifndef VS_ENEMY_FACTORY
-#define VS_ENEMY_FACTORY
+#ifndef VS_ENEMY_FACTORY_HPP
+#define VS_ENEMY_FACTORY_HPP
+
 #include "Enemy.h"
 
 namespace vs {
@@ -12,12 +13,12 @@ namespace vs {
 		game_logic*						_game_logic;
 	public:
 
-		enemy_factory(game_logic* game);
-		~enemy_factory();
+		enemy_factory										(game_logic* game);
+		~enemy_factory										();
 
-		enemy*							make_enemy(enemy::E_ENEMY_TYPE type, float x, float y) const;
-		void							initialize();
+		enemy*							make_enemy			(enemy::E_ENEMY_TYPE type, float x, float y) const;
+		void							initialize			();
 	};
 }
 
-#endif //VS_ENEMY_FACTORY
+#endif //VS_ENEMY_FACTORY_HPP

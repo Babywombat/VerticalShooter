@@ -14,13 +14,13 @@ namespace vs {
 		float								_shooting_speed;
 
 	public:
-		shooting_enemy(ID2D1PathGeometry* geometry, game_logic* logic);
-		~shooting_enemy();
+		shooting_enemy													(ID2D1PathGeometry* geometry, game_logic* logic);
+		~shooting_enemy													();
 
-		void								on_update(double delta_time) override;
-		void								on_render(ID2D1HwndRenderTarget* render_target) override;
-		void								initialize() override;
-		E_ENEMY_TYPE						get_type() const override;
+		void								on_update					(double delta_time) override;
+		void								on_render					(ID2D1HwndRenderTarget* render_target) override;
+		void								initialize					() override;
+		E_ENEMY_TYPE						get_type					() const override;
 	};
 }
 

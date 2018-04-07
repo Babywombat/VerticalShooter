@@ -14,7 +14,7 @@ namespace vs {
 
 		input();
 
-		E_KEY_STATE _ascii_keys[255]{};
+		E_KEY_STATE				_ascii_keys[255]{};
 	public:
 		enum E_KEYS {
 			Backspace = 0x08,
@@ -174,18 +174,15 @@ namespace vs {
 			OEMClear = 0xFE
 		};
 
-		static input& get_instance();
+		static input&			get_instance					();
 
-		bool try_handle_keyboard_message(const MSG& keyboard_message);
+		bool					try_handle_keyboard_message		(const MSG& keyboard_message);
+		bool					is_key_down						(E_KEYS key);
+		bool					is_key_held						(E_KEYS key);
 
-
-		~input();
-
-		bool is_key_down(E_KEYS key);
-		bool is_key_held(E_KEYS key);
-
-		input(const input&) = delete;
-		void operator=(const input&) = delete;
+		input													(const input&) = delete;
+		void operator=											(const input&) = delete;
+		~input													();
 	};
 }
 

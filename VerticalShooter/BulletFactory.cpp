@@ -3,6 +3,19 @@
 using namespace vs;
 
 /// <summary>
+/// Constructor
+/// </summary>
+bullet_factory::bullet_factory():
+	_multi_bullet_offset	(15) {
+	
+}
+
+/// <summary>
+/// Destructor
+/// </summary>
+bullet_factory::~bullet_factory() = default;
+
+/// <summary>
 /// Creates a single bullet of the specified type
 /// </summary>
 /// <param name="type">Type of the bullet</param>
@@ -10,7 +23,10 @@ using namespace vs;
 /// <param name="y">y Position</param>
 /// <param name="layer">Layer of the bullet (standard is player_bullet, meaning the bullet will hit enemies) </param>
 /// <returns></returns>
-bullet* bullet_factory::make_single_bullet(bullet::E_BULLET_TYPE type, float x, float y, transform_2d::E_LAYER layer) const {
+bullet* bullet_factory::make_single_bullet(const bullet::E_BULLET_TYPE type,
+	const float x,
+	const float y,
+	const transform_2d::E_LAYER layer) const {
 	bullet* new_bullet = nullptr;
 
 	switch (type) {
@@ -36,20 +52,6 @@ bullet* bullet_factory::make_single_bullet(bullet::E_BULLET_TYPE type, float x, 
 	}
 	return new_bullet;
 }
-
-/// <summary>
-/// Constructor
-/// </summary>
-bullet_factory::bullet_factory():
-	_multi_bullet_offset	(15) {
-	
-}
-
-
-/// <summary>
-/// Destructor
-/// </summary>
-bullet_factory::~bullet_factory() = default;
 
 /// <summary>
 /// Creates bullets of the specified type, may be a single or multiple bullets, returns them in a vector

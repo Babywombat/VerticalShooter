@@ -56,7 +56,7 @@ void vs::bullet::initialize() {
 	_color = D2D1::ColorF(D2D1::ColorF::Gray, 1.0f);
 	_speed = 100.0f;
 	_health = 1;
-	set_layer(E_LAYER::player_bullet);
+	set_layer(player_bullet);
 }
 
 /// <summary>
