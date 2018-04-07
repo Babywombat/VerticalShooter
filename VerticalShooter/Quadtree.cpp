@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "Quadtree.h"
+#include "Utils.h"
 
 using namespace std;
 using namespace vs;
@@ -201,7 +202,7 @@ void quadtree::render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrush
 	_sw->render(render_target, brush);
 
 	if (_parent == nullptr) {
-		brush->Release();
+		utils::safe_release(&brush);
 	}
 }
 

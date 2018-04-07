@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Defines.h"
 #include "GameLogic.h"
+#include "Utils.h"
 
 using namespace vs;
 
@@ -56,7 +57,7 @@ void player::on_update(double delta_time) {
 		//Create a bullet
 		if(_time_since_bullet <= 0.0f) {
 			_time_since_bullet = _shooting_speed;
-			_logic->create_bullet(bullet_factory::normal, _x + _width / 2, _y - _height);
+			_logic->create_bullets(bullet::normal, _x + _width / 2, _y - _height);
 		}
 	}
 }
@@ -86,7 +87,7 @@ void player::on_render(ID2D1HwndRenderTarget* render_target) {
 	render_target->DrawLine(point2, point3, brush, line_width);
 	//render_target->DrawRectangle(get_aabb(), brush);
 
-	brush->Release();
+	utils::safe_release(&brush);
 }
 
 /// <summary>

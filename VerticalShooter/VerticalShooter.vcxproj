@@ -122,10 +122,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EnemyFactory.cpp" />
+    <ClCompile Include="FastEnemy.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletFactory.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="ShootingEnemy.cpp" />
     <ClCompile Include="Transform2d.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLogic.cpp" />
@@ -136,11 +138,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyFactory.h" />
+    <ClInclude Include="FastEnemy.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletFactory.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="ShootingEnemy.h" />
     <ClInclude Include="Transform2d.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLogic.h" />
@@ -148,6 +152,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="StepTimer.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

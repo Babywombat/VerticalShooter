@@ -64,4 +64,12 @@ int game_object::get_health() const {
 	return _health;
 }
 
+/// <summary>
+/// Sets the color of this gameobject
+/// </summary>
+/// <param name="color">Color to set</param>
+void game_object::set_color(D2D1::ColorF color) {
+	_color = color;
+}
+
 

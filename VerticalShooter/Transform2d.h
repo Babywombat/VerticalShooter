@@ -18,7 +18,7 @@ namespace vs {
 
 		enum E_LAYER {
 			no_collisions = 0,
-			bullet = 1,
+			player_bullet = 1,
 			enemy = 2,
 			player = 3
 		};
@@ -31,6 +31,8 @@ namespace vs {
 		float			get_width()			const;
 		float			get_height()		const;
 		D2D1_RECT_F		get_aabb()			const;
+
+		void			set_size(float width, float height);
 
 		void			set_position(float x, float y);
 		bool			is_colliding(transform_2d* other) const;

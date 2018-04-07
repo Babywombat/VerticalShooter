@@ -1,11 +1,13 @@
 #include "Bullet.h"
 #include "Defines.h"
+#include "Utils.h"
 
 /// <summary>
 /// Constructor
 /// </summary>
 vs::bullet::bullet() :
-	game_object	(0, 0, 5, 10) {}
+	game_object	(0, 0, 5, 10),
+	_direction	(-1){}
 
 /// <summary>
 /// Destructor
@@ -21,10 +23,10 @@ void vs::bullet::on_update(double delta_time) {
 
 	const auto current_change = _speed * static_cast<float>(delta_time);
 	//Move bullet straight up
-	_y -= current_change;
+	_y += current_change * _direction;
 
 	//Destroy off screen bullets
-	if (_y <= 0) inflict_damage(1);
+	if (_y <= 0 || _y - _height >= RESOLUTION_Y) inflict_damage(1);
 }
 
 /// <summary>
@@ -44,7 +46,7 @@ void vs::bullet::on_render(ID2D1HwndRenderTarget* render_target) {
 	//Draw the lines
 	render_target->FillRectangle(rect, brush);
 
-	brush->Release();
+	utils::safe_release(&brush);
 }
 
 /// <summary>
@@ -54,7 +56,7 @@ void vs::bullet::initialize() {
 	_color = D2D1::ColorF(D2D1::ColorF::Gray, 1.0f);
 	_speed = 100.0f;
 	_health = 1;
-	set_layer(E_LAYER::bullet);
+	set_layer(E_LAYER::player_bullet);
 }
 
 /// <summary>
@@ -63,4 +65,12 @@ void vs::bullet::initialize() {
 /// <param name="collided_object">Object that this object collided with</param>
 void vs::bullet::handle_collision(transform_2d* collided_object) {
 	inflict_damage(1);
+}
+
+/// <summary>
+/// Sets the bullets moving direction on the y-axis
+/// </summary>
+/// <param name="direction">Direction to move, negative means up, position means down</param>
+void vs::bullet::set_direction(const int direction) {
+	_direction = direction;
 }

@@ -1,5 +1,6 @@
 #include <windows.h>
 #include "Game.h"
+#include <ctime>
 
 /// <summary>
 /// Main entry point of the program.
@@ -20,6 +21,9 @@ int WINAPI WinMain(
 	// The return value is ignored, because we want to continue running in the
 	// unlikely event that HeapSetInformation fails.
 	HeapSetInformation(nullptr, HeapEnableTerminationOnCorruption, nullptr, 0);
+
+	//Seed the random
+	srand(time(nullptr));
 
 	if (SUCCEEDED(CoInitialize(NULL))) {
 		{

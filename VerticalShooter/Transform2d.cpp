@@ -61,11 +61,21 @@ D2D1_RECT_F vs::transform_2d::get_aabb() const {
 }
 
 /// <summary>
+/// Sets the size of this object
+/// </summary>
+/// <param name="width">Width of the object</param>
+/// <param name="height">Height of the object</param>
+void vs::transform_2d::set_size(const float width, const float height) {
+	_width = width;
+	_height = height;
+}
+
+/// <summary>
 /// Sets the position of this object
 /// </summary>
 /// <param name="x"></param>
 /// <param name="y"></param>
-void vs::transform_2d::set_position(float x, float y) {
+void vs::transform_2d::set_position(const float x, const float y) {
 	_x = x;
 	_y = y;
 }

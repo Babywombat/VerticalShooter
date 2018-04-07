@@ -29,6 +29,8 @@ namespace vs {
 		bool								inflict_damage(int damage);
 		bool								is_dead() const;
 		int									get_health() const;
+
+		void								set_color(D2D1::ColorF color);
 	};
 }
 

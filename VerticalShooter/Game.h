@@ -14,14 +14,6 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
 #endif
 
-template<class i>
-void safe_release(i **interface_to_release) {
-	if (*interface_to_release != nullptr) {
-		(*interface_to_release)->Release();
-		(*interface_to_release) = nullptr;
-	}
-}
-
 namespace vs {
 	class game {
 	private:
@@ -33,7 +25,7 @@ namespace vs {
 		IDWriteTextFormat*					_text_format;
 		DX::StepTimer						_timer;
 		game_logic							_logic;
-
+	private:
 		//Functions
 		HRESULT								create_device_independant_resources();
 		HRESULT								create_device_resources();
@@ -53,6 +45,7 @@ namespace vs {
 		HRESULT								initialize();
 
 		void								run_game_loop();
+		ID2D1Factory* get_direct2d_factory() const;
 	};
 }
 

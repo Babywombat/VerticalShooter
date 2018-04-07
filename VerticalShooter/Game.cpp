@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Input.h"
 #include "Defines.h"
+#include "Utils.h"
 
 using namespace D2D1;
 using namespace vs;
@@ -14,15 +15,17 @@ using namespace vs;
 game::game() :
 	_hwnd					(nullptr),
 	_direct2d_factory		(nullptr),
-	_render_target			(nullptr) {
-}
+	_render_target			(nullptr), 
+	_write_factory			(nullptr), 
+	_text_format			(nullptr),
+	_logic					(this) {}
 
 /// <summary>
 /// Destructor
 /// </summary>
 game::~game() {
-	safe_release(&_direct2d_factory);
-	safe_release(&_render_target);
+	utils::safe_release(&_direct2d_factory);
+	utils::safe_release(&_render_target);
 }
 
 /// <summary>
@@ -30,11 +33,10 @@ game::~game() {
 /// </summary>
 /// <returns>HRESULT</returns>
 HRESULT game::initialize() {
-	HRESULT hr;
 
 	// Initialize device-indpendent resources, such
 	// as the Direct2D factory.
-	hr = create_device_independant_resources();
+	auto hr = create_device_independant_resources();
 
 	if (SUCCEEDED(hr)) {
 		// Register the window class.
@@ -120,6 +122,14 @@ void game::run_game_loop() {
 }
 
 /// <summary>
+/// Returns the direct2d factory
+/// </summary>
+/// <returns></returns>
+ID2D1Factory* game::get_direct2d_factory() const {
+	return _direct2d_factory;
+}
+
+/// <summary>
 /// Creates the device independant resources such as the factory
 /// </summary>
 /// <returns>HRESULT</returns>
@@ -198,7 +208,7 @@ HRESULT game::create_device_resources() {
 /// Releases the device resources
 /// </summary>
 void game::discard_device_resources() {
-	safe_release(&_render_target);
+	utils::safe_release(&_render_target);
 }
 
 /// <summary>

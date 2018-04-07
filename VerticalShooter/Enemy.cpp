@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "Defines.h"
+#include "Utils.h"
 
 using namespace vs;
 
@@ -31,13 +32,13 @@ void enemy::on_update(double delta_time) {
 }
 
 /// <summary>
-/// Renders the enemies visuals
+/// Renders the enemies' visuals
 /// </summary>
 /// <param name="render_target">Target to render to</param>
 void enemy::on_render(ID2D1HwndRenderTarget* render_target) {
 	if (!render_target) return;
 
-	//Drawing the player's visuals
+	//Drawing the enemies' visuals
 	ID2D1SolidColorBrush* brush;
 	render_target->CreateSolidColorBrush(_color, &brush);
 
@@ -48,14 +49,14 @@ void enemy::on_render(ID2D1HwndRenderTarget* render_target) {
 	render_target->FillEllipse(D2D1::Ellipse(center, _width / 2, _height / 2), brush);
 	//render_target->DrawRectangle(get_aabb(), brush);
 
-	brush->Release();
+	utils::safe_release(&brush);
 }
 
 /// <summary>
 /// Initializes the enemy
 /// </summary>
 void enemy::initialize() {
-	_color = D2D1::ColorF(D2D1::ColorF::Red, 1.0f);
+	_color = D2D1::ColorF(D2D1::ColorF::CadetBlue, 1.0f);
 	_speed = 20.0f;
 	_health = 1;
 	set_layer(E_LAYER::enemy);
@@ -67,4 +68,12 @@ void enemy::initialize() {
 /// <param name="collided_object">Object that this object collided with</param>
 void enemy::handle_collision(transform_2d* collided_object) {
 	inflict_damage(1);
+}
+
+/// <summary>
+/// Returns the enemies' type
+/// </summary>
+/// <returns>Enemy type</returns>
+enemy::E_ENEMY_TYPE enemy::get_type() const {
+	return normal;
 }
